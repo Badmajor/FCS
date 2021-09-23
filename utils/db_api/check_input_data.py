@@ -42,20 +42,6 @@ async def check_invite(invite):
         return False
 
 
-async def check_status_completed(user_id):
-    connect = await connection()
-    try:
-        with connect.cursor() as cursor:
-            command = "SELECT `completed` FROM `users` WHERE `user_id`=%s"
-            cursor.execute(command, user_id)
-            return cursor.fetchone().get('completed')
-    except Exception as ex:
-        await dp.bot.send_message(user_id, "Ошибка регистрации, напишите @badmajor об ошибке")
-        logging.info(f'Не получилось записать пользователя... ошибка:{ex}')
-        connect.close()
-        logging.info(f'Cоединение с БД закрыто')
-        return 'Err'
-
 
 async def check_contact(message):
     user_id = message.from_user.id

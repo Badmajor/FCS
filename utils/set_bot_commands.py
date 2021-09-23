@@ -8,5 +8,6 @@ async def set_default_commands(dp):
             types.BotCommand("help", "Попросить помощи"),
             types.BotCommand("reg", "Зарегистрироваться"),
             types.BotCommand("menu", "Войти в меню личного кабинета"),
+            types.BotCommand("docs", "Ознакомиться с документами проекта")
         ]
     )

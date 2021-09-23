@@ -1,9 +1,10 @@
-from aiogram import types
 
 
 async def help_command(message):
-    text = ("Список команд: ",
+    text = ("Список документов: ",
             "/start - Начать диалог",
-            "/help - Получить справку")
-
+            "/help - Получить справку",
+            "/reg - Зарегистрироваться",
+            "/menu - Войти в меню личного кабинета",
+            "/docs - Ознакомиться с документами проекта")
     await message.answer("\n".join(text))

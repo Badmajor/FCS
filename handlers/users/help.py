@@ -10,6 +10,6 @@ async def bot_help(message: types.Message):
     await help_command(message)
 
 
-@dp.callback_query_handler(text_contains='help')
+@dp.message_handler(text_contains='help')
 async def bot_help(message: types.Message):
     await help_command(message)

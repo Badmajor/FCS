@@ -1,14 +1,28 @@
 from aiogram import types
+from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher.filters import Text
+
 from loader import dp
 
 
 # Эхо хендлер, куда летят текстовые сообщения без указанного состояния
 
 
-@dp.message_handler(state=None)
+'''@dp.message_handler(state=None)
 async def bot_echo(message: types.Message):
     await message.answer(f"Используйте только "
                          f"доступные команды\n"
+                         f"/Start\n"
+                         f"/Help\n"
+                         f"/Reg\n"
+                         f"/Menu\n")'''
+
+
+@dp.message_handler(Text(equals="отмена", ignore_case=True), state='*')
+async def all_cancel(message: types.Message, state: FSMContext):
+    await state.finish()
+    await message.answer(f'Отменил!')
+    await message.answer(f"Доступные команды\n"
                          f"/Start\n"
                          f"/Help\n"
                          f"/Reg\n"
