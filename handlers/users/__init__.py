@@ -5,4 +5,5 @@ from . import registration
 from . import menu
 from . import view_squad
 from . import verification
+from . import invite_keyboard_handler
 from . import echo

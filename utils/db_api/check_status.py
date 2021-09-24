@@ -48,9 +48,9 @@ async def check_status_invite(ref):
             for row in rows:
                 if ref in row.get('invite'):
                     logging.info(f'Cоединение с БД закрыто')
-                    return 'used'
+                    return '🆗'
             logging.info(f'Cоединение с БД закрыто')
-            return 'free'
+            return '🆓'
     except Exception as ex:
         await dp.bot.send_message(id, "Не удалось проверить статус напишите @badmajor об ошибке")
         logging.info(f'Не удалось проверить статус пользователя... ошибка:{ex}')

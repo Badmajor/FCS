@@ -1,8 +1,12 @@
+from contextlib import suppress
+
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.types import CallbackQuery
+from aiogram.utils.exceptions import MessageNotModified
 
 from keyboards.default.confirm_keyboards import confirm_verification_keyboard
+from keyboards.inline.invite_keyboard import make_invite_keyboard
 from keyboards.inline.keybord_menu import keyboard_menu_verified_user, keyboard_menu_registered_user
 
 from loader import dp
@@ -46,10 +50,12 @@ async def back_menu_reg(call: CallbackQuery):
 
 @dp.callback_query_handler(text_contains='ver:menu')
 async def back_menu_ver(call: CallbackQuery):
-    await call.message.edit_text(f'Личный кабинет \n\n'
-                                 f'Вы всегда можете помочь своей команде!'
-                                 f'Посмотреть Коды приглашений вашего Squad\n'
-                                 f'сможете в профиле.', reply_markup=keyboard_menu_verified_user)
+    with suppress(MessageNotModified):
+        await call.message.edit_text(f'Личный кабинет \n\n'
+                                     f'Вы всегда можете помочь своей команде!'
+                                     f'Посмотреть Коды приглашений вашего Squad\n'
+                                     f'сможете в профиле.', reply_markup=keyboard_menu_verified_user)
+    await call.answer()
 
 
 @dp.callback_query_handler(text_contains='ver:invite')
@@ -60,7 +66,7 @@ async def view_invite_list(call: CallbackQuery):
     await call.message.edit_text(f'Коды приглашения:\n'
                                  f'{ref_1} - {status_invite[0]}\n'
                                  f'{ref_2} - {status_invite[1]}',
-                                 reply_markup=keyboard_menu_verified_user)
+                                 reply_markup=make_invite_keyboard(ref_1, ref_2, status_invite))
 
 
 @dp.callback_query_handler(text_contains='ver:info')

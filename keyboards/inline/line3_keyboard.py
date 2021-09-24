@@ -1,9 +1,9 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from keyboards.inline.callback_datas import menu_callback, line3_callback
+from keyboards.inline.callback_datas import line3_callback
 
 
-def line3_keyboard(list_user:list):
+def line3_keyboard(list_user: list):
     keyboard = InlineKeyboardMarkup(row_width=2)
     for data in list_user:
         s = ''
@@ -20,7 +20,7 @@ def line3_keyboard(list_user:list):
     return keyboard
 
 
-def line3_keyboard_ver(list_user:list, call):
+def line3_keyboard_ver(list_user: list, call):
     keyboard = InlineKeyboardMarkup(row_width=2)
     id = call.data.split(':')[1]
     buttons = []
