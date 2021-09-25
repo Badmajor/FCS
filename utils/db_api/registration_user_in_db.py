@@ -18,8 +18,6 @@ async def registration(message, data_user):
     name = message.from_user.username
     id_db = 0
     ver = 0
-    if invite in BORN_LUCK:
-        ver = 1
     parent_id = await get_parent_id(invite)
     if invite[-1] == 'r':
         id_db = parent_id * 2 + 1

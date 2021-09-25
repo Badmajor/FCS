@@ -6,6 +6,7 @@ from aiogram.types import CallbackQuery
 
 from handlers.users.menu import back_menu_ver, view_invite_list
 from keyboards.inline.callback_datas import squad_keyboard_callback, line3_callback
+from keyboards.inline.invite_keyboard import make_invite_keyboard
 from keyboards.inline.keybord_menu import keyboard_menu_verified_user
 from keyboards.inline.line3_keyboard import line3_keyboard, line3_keyboard_ver
 from keyboards.inline.squad_keyboard import make_squad_keyboard
@@ -48,22 +49,19 @@ async def view_squad_user(call: CallbackQuery, callback_data: dict, state: FSMCo
     ref_1, ref_2 = await get_invite(callback_data.get('user_id'))
     status_invite = [await check_status_invite(r) for r in [ref_1, ref_2]]
     list_squad = await state.get_data('list_squad')
-    try:
-        if callback_data.get('ver') == '1':
-            await call.message.edit_text(
-                f'{callback_data.get("phone")} \nПрошел верификацию!\n\n'
-                f'Коды приглашений:\n'
-                f'{ref_1} - {status_invite[0]}\n'
-                f'{ref_2} - {status_invite[1]}',
-                reply_markup=make_squad_keyboard(list_squad.get('list_dict_ref'))
-            )
-        else:
-            await call.message.edit_text(
-                f'{callback_data.get("phone")} \nНе прошел верификацию!',
-                reply_markup=make_squad_keyboard(list_squad.get('list_dict_ref'))
-            )
-    except Exception as ex:
-        logging.info(f'... ошибка: {ex}')
+    if callback_data.get('ver') == '1':
+        await call.message.edit_text(
+            f'{callback_data.get("phone")} \nПрошел верификацию!\n\n'
+            f'Коды приглашений:\n'
+            f'{ref_1} - {status_invite[0]}\n'
+            f'{ref_2} - {status_invite[1]}',
+            reply_markup=make_invite_keyboard(ref_1, ref_2, status_invite)
+        )
+    else:
+        await call.message.edit_text(
+            f'{callback_data.get("phone")} \nНе прошел верификацию!',
+            reply_markup=make_squad_keyboard(list_squad.get('list_dict_ref'))
+        )
 
 
 @dp.callback_query_handler(text_contains='ver:ver')

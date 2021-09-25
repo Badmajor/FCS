@@ -7,12 +7,12 @@ from keyboards.inline.callback_datas import invite_callback
 from keyboards.inline.invite_keyboard import make_invite_keyboard
 from loader import dp
 from utils.db_api.check_status import check_status_invite
-from utils.db_api.get_data_db import get_invite
 
 
-@dp.callback_query_handler(invite_callback.filter())
+@dp.callback_query_handler(invite_callback.filter(), state='*')
 async def send_invite(call: CallbackQuery, callback_data: dict):
-    ref_1, ref_2 = await get_invite(call.from_user.id)
+    list_ref = list(callback_data.get("data").split(' '))
+    ref_1, ref_2 = list_ref[0], list_ref[1]
     status_invite = [await check_status_invite(r) for r in [ref_1, ref_2]]
     if callback_data.get("status") == '🆓':
         await call.message.answer(callback_data.get("invite"))
