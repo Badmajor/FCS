@@ -1,6 +1,4 @@
 import logging
-
-from data.config import BORN_LUCK
 from loader import dp
 
 from utils.db_api.connect import connection

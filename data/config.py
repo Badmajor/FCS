@@ -1,12 +1,20 @@
+import os
+
 from environs import Env
 
 env = Env()
 env.read_env()
 
-BOT_TOKEN = env.str("BOT_TOKEN")  # Забираем значение типа str
-ADMINS = env.list("ADMINS")  # Тут у нас будет список из админов
-BORN_LUCK = env.list('BORN_LUCK')  # Список тех кто имеет бесплатные инвайты
-MYSQL_DB_NAME = env.str('MYSQL_DB_NAME')
-MYSQL_DB_LOGIN = env.str('MYSQL_DB_LOGIN')
-MYSQL_DB_PASSWORD = env.str('MYSQL_DB_PASSWORD')
-SERVER_DB = env.str('SERVER_DB')
+BOT_TOKEN = os.environ["BOT_TOKEN"]  # Забираем значение типа str
+ADMINS = os.environ["ADMINS"]  # Тут у нас будет список из админов
+
+MYSQL_DB_NAME = os.environ['MYSQL_DB_NAME']
+MYSQL_DB_LOGIN = os.environ['MYSQL_DB_LOGIN']
+MYSQL_DB_PASSWORD = os.environ['MYSQL_DB_PASSWORD']
+SERVER_DB = os.environ['SERVER_DB']
+
+WEBHOOK_HOST = os.environ['WEBHOOK_HOST']
+WEBHOOK_PATH = os.environ['WEBHOOK_PATH']
+WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
+WEBAPP_HOST = os.environ['WEBAPP_HOST']
+WEBAPP_PORT = os.environ.get('PORT')

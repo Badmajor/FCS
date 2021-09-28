@@ -18,8 +18,11 @@ from utils.db_api.get_data_db import get_parent_data, get_team_leader, get_invit
 
 
 @dp.message_handler(commands="menu", state='*')
-async def start_menu(message: types.Message, state: FSMContext):
-    await state.finish()
+async def start_menu(message: types.Message, *state: FSMContext):
+    try:
+        await state.finish()
+    except:
+        pass
     status = await check_status_user(message.from_user.id)
     if status == 'ver':
         await message.answer(f'Личный кабинет\n\n'
