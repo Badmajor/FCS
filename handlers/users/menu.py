@@ -17,8 +17,9 @@ from utils.db_api.delete_data_db import del_account_db
 from utils.db_api.get_data_db import get_parent_data, get_team_leader, get_invite
 
 
-@dp.message_handler(commands="menu")
-async def start_menu(message: types.Message):
+@dp.message_handler(commands="menu", state='*')
+async def start_menu(message: types.Message, state: FSMContext):
+    await state.finish()
     status = await check_status_user(message.from_user.id)
     if status == 'ver':
         await message.answer(f'Личный кабинет\n\n'
@@ -42,10 +43,12 @@ async def back_menu_reg(call: CallbackQuery):
     invited_name, phone = await get_parent_data(call.from_user.id)
     if '+' not in phone:
         phone = '+' + phone
-    await call.message.edit_text(f'Ваш аккаунт не верифицирован!\n'
-                                 f'Подробнее: ссылка на гайд по вериф.\n\n'
-                                 f'Вас пригласил: @{invited_name} \n'
-                                 f'Контакт: {phone}', reply_markup=keyboard_menu_registered_user)
+    with suppress(MessageNotModified):
+        await call.message.edit_text(f'Ваш аккаунт не верифицирован!\n'
+                                     f'Подробнее: ссылка на гайд по вериф.\n\n'
+                                     f'Вас пригласил: @{invited_name} \n'
+                                     f'Контакт: {phone}', reply_markup=keyboard_menu_registered_user)
+    await call.answer()
 
 
 @dp.callback_query_handler(text_contains='ver:menu')
@@ -60,25 +63,27 @@ async def back_menu_ver(call: CallbackQuery):
 
 @dp.callback_query_handler(text_contains='ver:invite')
 async def view_invite_list(call: CallbackQuery):
-    await call.answer(cache_time=5)
+    await call.answer(cache_time=2)
     ref_1, ref_2 = await get_invite(call.from_user.id)
     status_invite = [await check_status_invite(r) for r in [ref_1, ref_2]]
-    await call.message.edit_text(f'Коды приглашения:\n'
-                                 f'{ref_1} - {status_invite[0]}\n'
-                                 f'{ref_2} - {status_invite[1]}',
-                                 reply_markup=make_invite_keyboard(ref_1, ref_2, status_invite))
+    with suppress(MessageNotModified):
+        await call.message.edit_text(f'Коды приглашения:\n'
+                                     f'{ref_1} - {status_invite[0]}\n'
+                                     f'{ref_2} - {status_invite[1]}',
+                                     reply_markup=make_invite_keyboard(ref_1, ref_2, status_invite))
+    await call.answer()
 
 
 @dp.callback_query_handler(text_contains='ver:info')
 async def view_info(call: CallbackQuery):
-    await call.answer(cache_time=5)
+    await call.answer(cache_time=2)
     await call.message.edit_text('типа показываю больше инфо',
                                  reply_markup=keyboard_menu_verified_user)
 
 
 @dp.callback_query_handler(text_contains='reg:info')
 async def view_info(call: CallbackQuery):
-    await call.answer(cache_time=5)
+    await call.answer(cache_time=2)
     await call.message.edit_text('типа показываю больше инфо',
                                  reply_markup=keyboard_menu_registered_user)
 
@@ -99,7 +104,7 @@ async def go_verification(call: CallbackQuery, state: FSMContext):
         await call.message.edit_text(f'Ваш SquadLeader: @{squadleader}\n'
                                      f'Номер для перевода: {phone}\n\n'
                                      f'Перед отправкой денег свяжитесь с Тилидером.\n'
-                                     f'После отпраки денег сохраните информацию о платеже'
+                                     f'После отправки денег сохраните информацию о платеже\n'
                                      f'и напомните, что бы Вас верифицировали',
                                      reply_markup=keyboard_menu_registered_user)
         await state.update_data(squadleader=squadleader, phoneleader=phone, user_id=sq_user_id)
@@ -108,7 +113,7 @@ async def go_verification(call: CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(text_contains='reg:del', state=None)
 async def del_account_call(call: CallbackQuery):
-    await call.answer(cache_time=5)
+    await call.answer(cache_time=2)
     await call.message.answer('Удалить аккаунт?', reply_markup=confirm_verification_keyboard)
     await RegistrationUser.user_del_account.set()
 

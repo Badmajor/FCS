@@ -15,7 +15,8 @@ async def bot_echo(message: types.Message):
                          f"/Start\n"
                          f"/Help\n"
                          f"/Reg\n"
-                         f"/Menu\n")'''
+                         f"/Menu\n
+                         f"/Docs"")'''
 
 
 @dp.message_handler(Text(equals="отмена", ignore_case=True), state='*')
@@ -26,7 +27,8 @@ async def all_cancel(message: types.Message, state: FSMContext):
                          f"/Start\n"
                          f"/Help\n"
                          f"/Reg\n"
-                         f"/Menu\n")
+                         f"/Menu\n"
+                         f"/Docs")
 
 
 # Эхо хендлер, куда летят ВСЕ сообщения с указанным состоянием

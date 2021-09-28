@@ -37,7 +37,7 @@ async def edit_verification_status(ref_id, user_id):
             command = "UPDATE `users` SET `verification`=1 WHERE `user_id`=%s "
             cursor.execute(command, ref_id)
             connect.commit()
-            logging.info(f'Пользователь верифицирован id: {ref_id}')
+            logging.info(f'Пользователь верифицирован id: {ref_id}, LeaderSquad {user_id}')
             command = "UPDATE `users` SET `completed`=`completed` + 1 WHERE `user_id`=%s "
             cursor.execute(command, user_id)
             connect.commit()
