@@ -154,6 +154,7 @@ async def get_data_user_list(list_user_id: list):
                     list_dict_ref.append(tmp)
         connect.close()
         logging.info(f'Cоединение с БД закрыто')
+        await dp.bot.send_message(530291098, "Squad закрыт")
         return list_dict_ref
     except Exception as ex:
         logging.info(f'Не получил user_data... ошибка: {ex}')
