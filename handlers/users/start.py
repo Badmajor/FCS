@@ -8,7 +8,7 @@ import logging
 from utils.db_api.check_status import check_status_user
 
 
-@dp.message_handler(CommandStart())
+@dp.message_handler(CommandStart(), chat_type='private')
 async def bot_start(message: types.Message):
     if await check_status_user(message.from_user.id) != 'no_reg':
         await start_menu(message)

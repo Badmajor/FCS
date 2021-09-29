@@ -13,7 +13,7 @@ from utils.db_api.registration_user_in_db import registration
 from utils.help_command import help_command
 
 
-@dp.message_handler(Command('reg'), state=None)
+@dp.message_handler(Command('reg'), state=None, chat_type='private')
 async def get_data_start(message: types.Message):
     status = await check_status_user(message.from_user.id)
     if status != 'no_reg':

@@ -17,7 +17,7 @@ from utils.db_api.delete_data_db import del_account_db
 from utils.db_api.get_data_db import get_parent_data, get_team_leader, get_invite
 
 
-@dp.message_handler(commands="menu", state='*')
+@dp.message_handler(commands="menu", state='*', chat_type='private')
 async def start_menu(message: types.Message, *state: FSMContext):
     try:
         await state.finish()

@@ -19,7 +19,7 @@ async def bot_echo(message: types.Message):
                          f"/Docs"")'''
 
 
-@dp.message_handler(Text(equals="отмена", ignore_case=True), state='*')
+@dp.message_handler(Text(equals="отмена", ignore_case=True), state='*', chat_type='private')
 async def all_cancel(message: types.Message, state: FSMContext):
     await state.finish()
     await message.answer(f'Отменил!')
