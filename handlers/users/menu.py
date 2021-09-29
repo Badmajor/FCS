@@ -106,7 +106,7 @@ async def go_verification(call: CallbackQuery, state: FSMContext):
             phone = '+' + phone
         await call.message.edit_text(f'Ваш SquadLeader: @{squadleader}\n'
                                      f'Номер для перевода: {phone}\n\n'
-                                     f'Перед отправкой денег свяжитесь с Тилидером.\n'
+                                     f'Перед отправкой денег свяжитесь с Лидером Squadа.\n'
                                      f'После отправки денег сохраните информацию о платеже\n'
                                      f'и напомните, что бы Вас верифицировали',
                                      reply_markup=keyboard_menu_registered_user)
