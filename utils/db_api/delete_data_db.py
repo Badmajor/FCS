@@ -2,6 +2,7 @@ import logging
 
 from loader import dp
 from utils.db_api.connect import connection
+from utils.notify_admins import completed_squad
 
 
 async def del_account_db(message):
@@ -36,6 +37,7 @@ async def del_completed_account_db(message):
             logging.info(f'Пользователь Удален. Squad copleted {user_id}')
             connect.close()
             logging.info(f'Cоединение с БД закрыто')
+            await completed_squad(dp)
             return True
     except Exception as ex:
         await dp.bot.send_message(user_id, "Ошибка регистрации, напишите @badmajor об ошибке")
