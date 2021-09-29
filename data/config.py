@@ -6,7 +6,7 @@ env = Env()
 env.read_env()
 
 BOT_TOKEN = os.environ["BOT_TOKEN"]  # Забираем значение типа str
-ADMINS = os.environ["ADMINS"]  # Тут у нас будет список из админов
+ADMINS = str(os.environ["ADMINS"])  # Тут у нас будет список из админов
 
 MYSQL_DB_NAME = os.environ['MYSQL_DB_NAME']
 MYSQL_DB_LOGIN = os.environ['MYSQL_DB_LOGIN']
