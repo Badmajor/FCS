@@ -2,7 +2,7 @@ from aiogram import types
 from aiogram.dispatcher.filters.builtin import CommandStart
 
 from handlers.users.menu import start_menu
-from loader import dp, bot
+from loader import dp
 import logging
 
 from utils.db_api.check_status import check_status_user
