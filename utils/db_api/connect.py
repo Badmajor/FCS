@@ -16,3 +16,6 @@ async def connection():
         return connect
     except Exception as ex:
         logging.info(f'Не получилось подключиться... ошибка:{ex}')
+
+
+

@@ -13,14 +13,14 @@ from keyboards.inline.squad_keyboard import make_squad_keyboard
 from loader import dp
 from states.view_list_user import ViewLine3, ViewSquad
 from utils.db_api.check_status import check_status_invite
-from utils.db_api.get_data_db import get_3_line, get_list_id_squad, get_data_user_list, get_invite
+from utils.db_api.get_data_db import get_3_line, get_list_id_squad_2_line, get_data_user_list, get_invite
 from utils.db_api.verificatoin import confirm_verification
 
 
 @dp.callback_query_handler(text_contains='ver:squad')
 async def view_squad(call: CallbackQuery, state: FSMContext):
     await call.answer(cache_time=5)
-    list_squad_id = await get_list_id_squad(call.from_user.id)
+    list_squad_id = await get_list_id_squad_2_line(call.from_user.id)
     list_squad = await get_data_user_list(list_squad_id)
     await state.update_data(list_dict_ref=list_squad)
     if list_squad:
@@ -28,11 +28,12 @@ async def view_squad(call: CallbackQuery, state: FSMContext):
                                      f'Если есть люди желающие вступить в FCS,\n'
                                      f'но у вас кончились коды приглашения\n'
                                      f'всегда можете позаимствовать их у членов своего Squad.\n'
-                                     f'Для этого перейдите в профиль польхователя',
+                                     f'Для этого перейдите в профиль пользователя',
                                      reply_markup=make_squad_keyboard(list_squad))
         await ViewSquad.user_view_state.set()
     else:
-        await call.message.edit_text(f'Ваш squad пуст',
+        await call.message.edit_text(f'Ваш squad пуст\n'
+                                     f'Вы еще никого не пригласили',
                                      reply_markup=keyboard_menu_verified_user)
         await asyncio.sleep(2.5)
         await state.finish()
@@ -50,7 +51,7 @@ async def view_squad_user(call: CallbackQuery, callback_data: dict, state: FSMCo
     status_invite = [await check_status_invite(r) for r in [ref_1, ref_2]]
     list_squad = await state.get_data('list_squad')
     if callback_data.get('ver') == '1':
-        await call.message.edit_text(
+        await call.message.answer(
             f'{callback_data.get("phone")} \nПрошел верификацию!\n\n'
             f'Коды приглашений:\n'
             f'{ref_1} - {status_invite[0]}\n'

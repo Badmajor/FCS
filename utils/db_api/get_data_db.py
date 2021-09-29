@@ -90,6 +90,7 @@ async def get_id(user_id):
             get_id_command = "SELECT `id` FROM `users` WHERE `user_id`=%s "
             cursor.execute(get_id_command, user_id)
             id_in_db = cursor.fetchone().get('id')
+
             connect.close()
             logging.info(f'Cоединение с БД закрыто')
             return id_in_db
@@ -122,9 +123,27 @@ async def get_parent_id(invite):  # Переделать когда стану �
         return False
 
 
-async def get_list_id_squad(id, n=2, squaq_list=None, id_in_db=None):
+async def get_list_id_squad_3_line(id, n=3, squaq_list=None, id_in_db=None):
     """
-    Выдает всех рефов, списком по id
+    Выдает всех рефов, списком по user_id до 3 линии
+    """
+    if squaq_list is None:
+        id_in_db = await get_id(id)
+        squaq_list = []
+    if n < 1:
+        n = 3
+        return
+    for i in range(2):
+        num = id_in_db * 2 + i
+        squaq_list.append(num)
+        await get_list_id_squad_2_line(id, n - 1, squaq_list, num)
+    squaq_list.sort()
+    return squaq_list
+
+
+async def get_list_id_squad_2_line(id, n=2, squaq_list=None, id_in_db=None):
+    """
+    Выдает всех рефов, списком по id до 2 линии
     """
     if squaq_list is None:
         id_in_db = await get_id(id)
@@ -135,7 +154,7 @@ async def get_list_id_squad(id, n=2, squaq_list=None, id_in_db=None):
     for i in range(2):
         num = id_in_db * 2 + i
         squaq_list.append(num)
-        await get_list_id_squad(id, n - 1, squaq_list, num)
+        await get_list_id_squad_2_line(id, n - 1, squaq_list, num)
     squaq_list.sort()
     return squaq_list
 
@@ -220,8 +239,8 @@ async def get_user_data(id_user_in_db, db=True):
     try:
         with connect.cursor() as cursor:
             if db:
-                command = "SELECT `user_id`, `user_name`, `phone`, `verification`, `ref_1`, `ref_2` " \
-                          "FROM `users` WHERE `Id`=%s "
+                command = "SELECT `user_id`, `user_name`, `phone`, `verification`, `ref_1`, " \
+                          "`ref_2` FROM `users` WHERE `Id`=%s "
             else:
                 command = "SELECT `id`, `user_name`, `phone`, `verification`, `ref_1`, `ref_2` FROM `users` WHERE " \
                           "`user_id`=%s "

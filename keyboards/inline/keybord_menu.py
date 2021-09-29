@@ -4,10 +4,10 @@ from keyboards.inline.callback_datas import menu_callback, verification_callback
 
 keyboard_menu_verified_user = InlineKeyboardMarkup(row_width=2)  # row_width это длина клавиатуры в кнопках
 
-view_squad = InlineKeyboardButton(text='Мой Squad', callback_data=menu_callback.new(
+view_squad = InlineKeyboardButton(text='Посмотреть участников', callback_data=menu_callback.new(
     status='ver', command='squad'))
-view_info = InlineKeyboardButton(text='Инфо', callback_data=menu_callback.new(
-    status='ver', command='info'))
+view_info = InlineKeyboardButton(text='Мой Squad', callback_data=menu_callback.new(
+    status='ver', command='img'))
 view_invite = InlineKeyboardButton(text='Пригласить', callback_data=menu_callback.new(
     status='ver', command='invite'))
 ver_pay = InlineKeyboardButton(text='Подтвердить', callback_data=menu_callback.new(

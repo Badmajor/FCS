@@ -8,13 +8,17 @@ from aiogram.utils.exceptions import MessageNotModified
 from keyboards.default.confirm_keyboards import confirm_verification_keyboard
 from keyboards.inline.invite_keyboard import make_invite_keyboard
 from keyboards.inline.keybord_menu import keyboard_menu_verified_user, keyboard_menu_registered_user
+from keyboards.inline.squad_keyboard import make_squad_keyboard
 
-from loader import dp
+from loader import dp, bot
 from states.RegistrationUser import RegistrationUser
 from states.VerificationUser import VerificationUser
+from states.view_list_user import ViewSquad
 from utils.db_api.check_status import check_status_user, check_status_invite
 from utils.db_api.delete_data_db import del_account_db
-from utils.db_api.get_data_db import get_parent_data, get_team_leader, get_invite
+from utils.db_api.get_data_db import get_parent_data, get_team_leader, get_invite, get_list_id_squad_2_line, \
+    get_data_user_list
+from utils.pictures.picture_squad import picture_squad
 
 
 @dp.message_handler(commands="menu", state='*', chat_type='private')
@@ -57,10 +61,10 @@ async def back_menu_reg(call: CallbackQuery):
 @dp.callback_query_handler(text_contains='ver:menu')
 async def back_menu_ver(call: CallbackQuery):
     with suppress(MessageNotModified):
-        await call.message.edit_text(f'Личный кабинет \n\n'
-                                     f'Вы всегда можете помочь своей команде!'
-                                     f'Посмотреть Коды приглашений вашего Squad\n'
-                                     f'сможете в профиле.', reply_markup=keyboard_menu_verified_user)
+        await call.message.answer(f'Личный кабинет \n\n'
+                                  f'Вы всегда можете помочь своей команде!'
+                                  f'Посмотреть Коды приглашений вашего Squad\n'
+                                  f'сможете в профиле.', reply_markup=keyboard_menu_verified_user)
     await call.answer()
 
 
@@ -77,11 +81,20 @@ async def view_invite_list(call: CallbackQuery):
     await call.answer()
 
 
-@dp.callback_query_handler(text_contains='ver:info')
+@dp.callback_query_handler(text_contains='ver:img')
 async def view_info(call: CallbackQuery):
-    await call.answer(cache_time=2)
-    await call.message.edit_text('типа показываю больше инфо',
-                                 reply_markup=keyboard_menu_verified_user)
+    await call.answer(cache_time=5)
+    user_id = call.from_user.id
+    list_squad_id = await get_list_id_squad_2_line(user_id)
+    list_squad = await get_data_user_list(list_squad_id)
+    bio = await picture_squad(user_id)
+    await bot.send_photo(user_id, photo=bio, caption=f'Ваш squad\n\n'
+                                                     f'Если есть люди желающие вступить в FCS,\n'
+                                                     f'но у вас кончились коды приглашения\n'
+                                                     f'всегда можете позаимствовать их у членов своего Squad.\n'
+                                                     f'Для этого перейдите в профиль пользователя',
+                         reply_markup=make_squad_keyboard(list_squad))
+    await ViewSquad.user_view_state.set()
 
 
 @dp.callback_query_handler(text_contains='reg:info')
@@ -106,7 +119,7 @@ async def go_verification(call: CallbackQuery, state: FSMContext):
             phone = '+' + phone
         await call.message.edit_text(f'Ваш SquadLeader: @{squadleader}\n'
                                      f'Номер для перевода: {phone}\n\n'
-                                     f'Перед отправкой денег свяжитесь с Лидером Squadа.\n'
+                                     f'Перед отправкой денег свяжитесь с Тилидером.\n'
                                      f'После отправки денег сохраните информацию о платеже\n'
                                      f'и напомните, что бы Вас верифицировали',
                                      reply_markup=keyboard_menu_registered_user)
