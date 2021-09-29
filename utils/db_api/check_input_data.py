@@ -3,7 +3,6 @@ import logging
 from aiogram import types
 
 from keyboards.default import get_contact_keyboard
-from loader import dp
 from utils.db_api.connect import connection
 
 
@@ -40,7 +39,6 @@ async def check_invite(invite):
         connect.close()
         logging.info(f'Cоединение с БД закрыто')
         return False
-
 
 
 async def check_contact(message):

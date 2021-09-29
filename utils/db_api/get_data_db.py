@@ -220,8 +220,8 @@ async def get_user_data(id_user_in_db, db=True):
     try:
         with connect.cursor() as cursor:
             if db:
-                command = "SELECT `user_id`, `user_name`, `phone`, `verification`, `ref_1`, `ref_2` FROM `users` WHERE " \
-                      "`Id`=%s "
+                command = "SELECT `user_id`, `user_name`, `phone`, `verification`, `ref_1`, `ref_2` " \
+                          "FROM `users` WHERE `Id`=%s "
             else:
                 command = "SELECT `id`, `user_name`, `phone`, `verification`, `ref_1`, `ref_2` FROM `users` WHERE " \
                           "`user_id`=%s "
@@ -235,5 +235,3 @@ async def get_user_data(id_user_in_db, db=True):
         connect.close()
         logging.info(f'Cоединение с БД закрыто')
         return False
-
-

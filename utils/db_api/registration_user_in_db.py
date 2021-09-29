@@ -41,6 +41,3 @@ async def registration(message, data_user):
         connect.close()
         logging.info(f'Cоединение с БД закрыто')
         return False
-
-
-
