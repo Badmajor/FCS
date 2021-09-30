@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 
-from utils.db_api.get_data_db import get_list_id_squad_3_line, get_user_data
+from utils.db_api.get_data_db import get_list_id_squad_3_line, get_data_user_list
 
 
 async def picture_squad(user_id):
@@ -12,8 +12,9 @@ async def picture_squad(user_id):
     list_lame_horizontal = [405, 405, 675, 675, 675, 675, 945, 945, 945, 945, 945, 945, 945, 945]
     list_lame_vertical = [389, 1431, 156, 656, 1156, 1656, 35, 285, 535, 785, 1035, 1285, 1535, 1785]
     step = 0
-    for id in list_squad_id:
-        ref_user_data_dict = await get_user_data(id)
+    ref_user_data_dict_list = await get_data_user_list(list_squad_id)
+    for _ in list_squad_id:
+        ref_user_data_dict = ref_user_data_dict_list[step]
         if ref_user_data_dict is None:
             name, phone = 'Свободно', ''
         else:

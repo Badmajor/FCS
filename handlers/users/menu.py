@@ -14,9 +14,10 @@ from loader import dp, bot
 from states.RegistrationUser import RegistrationUser
 from states.VerificationUser import VerificationUser
 from states.view_list_user import ViewSquad
+from utils.db_api.GetDataDB import GetDataUser
 from utils.db_api.check_status import check_status_user, check_status_invite
 from utils.db_api.delete_data_db import del_account_db
-from utils.db_api.get_data_db import get_parent_data, get_team_leader, get_invite, get_list_id_squad_2_line, \
+from utils.db_api.get_data_db import get_parent_data, get_team_leader, get_list_id_squad_2_line, \
     get_data_user_list
 from utils.pictures.picture_squad import picture_squad
 
@@ -71,7 +72,8 @@ async def back_menu_ver(call: CallbackQuery):
 @dp.callback_query_handler(text_contains='ver:invite')
 async def view_invite_list(call: CallbackQuery):
     await call.answer(cache_time=2)
-    ref_1, ref_2 = await get_invite(call.from_user.id)
+    user = GetDataUser(call.from_user.id)
+    ref_1, ref_2 = user.ref_1(), user.ref_2()
     status_invite = [await check_status_invite(r) for r in [ref_1, ref_2]]
     with suppress(MessageNotModified):
         await call.message.edit_text(f'Коды приглашения:\n'

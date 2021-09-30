@@ -6,6 +6,8 @@ from keyboards.inline.callback_datas import squad_keyboard_callback, back_menu
 def make_squad_keyboard(list_squad: list):
     keyboard = InlineKeyboardMarkup(row_width=2)
     for data in list_squad:
+        if data is None:
+            continue
         s = ''
         user_name = data.get('phone') if data.get("user_name") is None else data.get("user_name")
         phone = data.get('phone') if data.get("user_name") is None else data.get('phone') + '  @' + data.get(

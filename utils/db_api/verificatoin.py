@@ -3,8 +3,9 @@ import logging
 
 from keyboards.default.confirm_keyboards import confirm_verification_keyboard
 from loader import bot, dp
+from utils.db_api.GetDataDB import GetDataUser
 from utils.db_api.connect import connection
-from utils.db_api.get_data_db import get_user_data
+
 
 
 async def confirm_verification(user_id, ref_id):
@@ -21,10 +22,11 @@ async def confirm_verification(user_id, ref_id):
                 chat_id=msg.chat.id, message_id=msg.message_id,
                 text=f'Верификацию отменить нельзя!')
         await asyncio.sleep(1.0)
-    data_ref_user = await get_user_data(ref_id, False)
+    user = GetDataUser(user_id)
+    user_name = user.user_name()
     await bot.send_message(
         user_id, f'Верифицировать пользователя?\n'
-                 f'@{data_ref_user.get("user_name")}', reply_markup=confirm_verification_keyboard)
+                 f'@{user_name}', reply_markup=confirm_verification_keyboard)
 
 
 async def edit_verification_status(ref_id, user_id):

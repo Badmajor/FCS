@@ -12,8 +12,9 @@ from keyboards.inline.line3_keyboard import line3_keyboard, line3_keyboard_ver
 from keyboards.inline.squad_keyboard import make_squad_keyboard
 from loader import dp
 from states.view_list_user import ViewLine3, ViewSquad
+from utils.db_api.GetDataDB import GetDataUser
 from utils.db_api.check_status import check_status_invite
-from utils.db_api.get_data_db import get_3_line, get_list_id_squad_2_line, get_data_user_list, get_invite
+from utils.db_api.get_data_db import get_3_line, get_list_id_squad_2_line, get_data_user_list
 from utils.db_api.verificatoin import confirm_verification
 
 
@@ -47,7 +48,8 @@ async def view_squad_user(call: CallbackQuery, callback_data: dict, state: FSMCo
         await state.finish()
         await back_menu_ver(call)
         return
-    ref_1, ref_2 = await get_invite(callback_data.get('user_id'))
+    user = GetDataUser(callback_data.get('user_id'))
+    ref_1, ref_2 = user.ref_1(), user.ref_2()
     status_invite = [await check_status_invite(r) for r in [ref_1, ref_2]]
     list_squad = await state.get_data('list_squad')
     if callback_data.get('ver') == '1':

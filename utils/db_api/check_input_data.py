@@ -3,7 +3,6 @@ import logging
 from aiogram import types
 
 from keyboards.default import get_contact_keyboard
-from loader import dp
 from utils.db_api.connect import connection
 
 
@@ -42,7 +41,6 @@ async def check_invite(invite):
         return False
 
 
-
 async def check_contact(message):
     user_id = message.from_user.id
     id_in_message = message.contact.user_id
@@ -51,3 +49,4 @@ async def check_contact(message):
         return True
     else:
         await message.answer('Нужно отправить номер который привязан к Telegram', reply_markup=get_contact_keyboard)
+        
