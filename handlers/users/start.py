@@ -18,5 +18,4 @@ async def bot_start(message: types.Message, state: FSMContext):
                      f'{message.from_user.last_name}')
         await message.answer(f"Привет, {message.from_user.first_name}!\n\n "
                              "Для начала регистрации введи команду /reg\n\n"
-                             f"У нас есть чат, если у тебя есть какие-то вопросы\n"
-                             f"https://t.me/FCS_chat")
+                             )
